@@ -2,28 +2,21 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
-import { useSearchParams } from "next/navigation";
 
-import { CheckCircle2, ChevronRight, IndianRupee } from "lucide-react";
+import { CheckCircle2, ChevronRight } from "lucide-react";
 
 import { poppins } from "../Font/poppins";
 
 function Services() {
-  const searchParams = useSearchParams();
-
-  const defaultTab = Number(searchParams.get("tab")) || 0;
-
-  const [activeTab, setActiveTab] = useState(defaultTab);
+  const [activeTab, setActiveTab] = useState(0);
 
   const services = [
     {
       image: "/1 (2).png",
       title: "Software Development",
       tag: "Development",
-
       description:
         "We build modern, scalable, and secure software solutions tailored to business needs.",
-
       points: [
         "Custom Web Application Development",
         "Business Management Software",
@@ -37,10 +30,8 @@ function Services() {
       image: "/Gigital Marketting.png",
       title: "Digital Marketing",
       tag: "Marketing",
-
       description:
         "We help businesses grow online with strategic digital marketing solutions.",
-
       points: [
         "Social Media Marketing",
         "Search Engine Optimization",
@@ -54,10 +45,8 @@ function Services() {
       image: "/Mobile App.png",
       title: "Mobile Application",
       tag: "Mobile",
-
       description:
         "We create high-performance mobile applications for Android and iOS platforms.",
-
       points: [
         "Android App Development",
         "iOS App Development",
@@ -71,10 +60,8 @@ function Services() {
       image: "/UI-UX design-amico.png",
       title: "UI/UX Design",
       tag: "Design",
-
       description:
         "We design clean and modern interfaces that improve user interaction.",
-
       points: [
         "Website UI Design",
         "Mobile App UI Design",
