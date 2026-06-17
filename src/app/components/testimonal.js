@@ -137,7 +137,7 @@ function Testimonials() {
         <div className={`${poppins.className} py-20 px-32 bg-[#f9fffe]`}>
 
           <div className="text-center mb-16">
-            <h1 className="text-4xl font-medium text-black">
+            <h1 className="text-2xl font-medium text-black">
               What Clients
               <span className="text-[#2ae5dd]"> Say About Us</span>
             </h1>
@@ -209,7 +209,7 @@ function Testimonials() {
         <div className={`${poppins.className} px-5 py-12`}>
 
           <div className="text-center mb-10">
-            <h1 className="text-3xl font-semibold text-black leading-tight">
+            <h1 className="text-2xl font-semibold text-black leading-tight">
               What Clients
               <span className="text-[#2ae5dd]"> Say About Us</span>
             </h1>

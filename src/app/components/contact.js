@@ -156,14 +156,14 @@ function ContactPage() {
                       <Phone size={20} className="text-[#2ae5dd]" />
                     </div>
                     <p className="text-gray-400 text-xs mb-2">Phone</p>
-                    <h1 className="text-md font-medium text-black leading-6">+91 98765 43210</h1>
+                    <h1 className="text-md font-medium text-black leading-6">+917845205463</h1>
                   </div>
                   <div className="bg-[#f8fffe] border border-[#2ae5dd]/10 rounded-2xl p-5">
                     <div className="w-12 h-12 rounded-full bg-[#2ae5dd]/10 flex items-center justify-center mb-4">
                       <MapPin size={20} className="text-[#2ae5dd]" />
                     </div>
                     <p className="text-gray-400 text-xs mb-2">Location</p>
-                    <h1 className="text-md font-medium text-black leading-6">Tamil Nadu, India</h1>
+                    <h1 className="text-md font-medium text-black leading-6">Tamil Nadu,Dharmapuri</h1>
                   </div>
                 </div>
 
@@ -281,14 +281,14 @@ function ContactPage() {
                         <Phone size={24} className="text-[#2ae5dd]" />
                       </div>
                       <p className="text-gray-400 text-sm mb-2">Phone</p>
-                      <h1 className="text-base font-medium text-black leading-7">+91 98765 43210</h1>
+                      <h1 className="text-base font-medium text-black leading-7">+917845205463</h1>
                     </div>
                     <div className="bg-[#f8fffe] border border-[#2ae5dd]/10 rounded-2xl p-6">
                       <div className="w-14 h-14 rounded-full bg-[#2ae5dd]/10 flex items-center justify-center mb-5">
                         <MapPin size={24} className="text-[#2ae5dd]" />
                       </div>
                       <p className="text-gray-400 text-sm mb-2">Location</p>
-                      <h1 className="text-base font-medium text-black leading-7">Tamil Nadu, India</h1>
+                      <h1 className="text-base font-medium text-black leading-7">Tamil Nadu,Dharmapuri</h1>
                     </div>
                   </div>
 
@@ -402,14 +402,14 @@ function ContactPage() {
                 <Phone size={16} className="text-[#2ae5dd]" />
               </div>
               <p className="text-gray-400 text-[10px] mb-1">Phone</p>
-              <h1 className="text-[10px] font-medium text-black leading-4">+91 98765 43210</h1>
+              <h1 className="text-[10px] font-medium text-black leading-4">+917845205463</h1>
             </div>
             <div className="bg-[#f8fffe] border border-[#2ae5dd]/10 rounded-2xl p-3 flex flex-col items-start">
               <div className="w-9 h-9 rounded-full bg-[#2ae5dd]/10 flex items-center justify-center mb-3">
                 <MapPin size={16} className="text-[#2ae5dd]" />
               </div>
               <p className="text-gray-400 text-[10px] mb-1">Location</p>
-              <h1 className="text-[10px] font-medium text-black leading-4">Tamil Nadu, India</h1>
+              <h1 className="text-[10px] font-medium text-black leading-4">Tamil Nadu,Dharmapuri</h1>
             </div>
           </div>
 
