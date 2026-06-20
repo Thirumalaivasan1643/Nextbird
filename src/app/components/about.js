@@ -14,35 +14,95 @@ import {
 import { poppins } from "../Font/poppins";
 import Link from "next/link";
 
+/* ── Defined OUTSIDE AboutPage to avoid "component created during render" error ── */
+const skills = [
+  { label: "Web Development", percent: 95, color: "#2ae5dd" },
+  { label: "UI/UX Design", percent: 94, color: "#8b5cf6" },
+  { label: "Mobile Applications", percent: 97, color: "#f59e0b" },
+  { label: "Digital Marketing", percent: 96, color: "#ef4444" },
+];
+
+const values = [
+  "User-centered design thinking",
+  "Agile and transparent delivery",
+  "Scalable modern tech stack",
+  "Long-term client partnerships",
+];
+
+/* ── SkillBars is a proper top-level component, receives animated as prop ── */
+function SkillBars({ animated, size = "md" }) {
+  const isLg = size === "lg";
+  const barH = isLg ? "h-2.5" : "h-2";
+  const dotSize = isLg ? "w-3 h-3" : "w-2.5 h-2.5";
+  const labelText = isLg ? "text-base" : "text-sm";
+  const badgeText = isLg ? "text-sm px-3 py-0.5" : "text-xs px-2.5 py-0.5";
+  const gap = isLg ? "space-y-7" : "space-y-6";
+
+  return (
+    <div className={gap}>
+      {skills.map((skill, i) => (
+        <div key={i}>
+          <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center gap-2.5">
+              <div
+                className={`${dotSize} rounded-full shrink-0`}
+                style={{ backgroundColor: skill.color }}
+              />
+              <span className={`${labelText} font-medium text-black`}>
+                {skill.label}
+              </span>
+            </div>
+            <span
+              className={`${badgeText} font-semibold rounded-full`}
+              style={{
+                backgroundColor: `${skill.color}1a`,
+                color: skill.color,
+              }}
+            >
+              {skill.percent}%
+            </span>
+          </div>
+          <div className={`w-full ${barH} bg-gray-100 rounded-full overflow-hidden`}>
+            <div
+              className="h-full rounded-full transition-all duration-1000 ease-out"
+              style={{
+                width: animated ? `${skill.percent}%` : "0%",
+                backgroundColor: skill.color,
+                transitionDelay: `${i * 150}ms`,
+              }}
+            />
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 function AboutPage() {
-  const skills = [
-    { label: "Web Development", percent: 95, color: "#2ae5dd" },
-    { label: "UI/UX Design", percent: 90, color: "#8b5cf6" },
-    { label: "Mobile Applications", percent: 85, color: "#f59e0b" },
-    { label: "Digital Marketing", percent: 80, color: "#ef4444" },
-  ];
-
-  const values = [
-    "User-centered design thinking",
-    "Agile and transparent delivery",
-    "Scalable modern tech stack",
-    "Long-term client partnerships",
-  ];
-
   const [animated, setAnimated] = useState(false);
-  const skillRef = useRef(null);
+
+  const desktopSkillRef = useRef(null);
+  const xl2SkillRef = useRef(null);
+  const mobileSkillRef = useRef(null);
 
   useEffect(() => {
+    const refs = [desktopSkillRef, xl2SkillRef, mobileSkillRef];
+
     const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
+      (entries) => {
+        const isAnyVisible = entries.some((entry) => entry.isIntersecting);
+        if (isAnyVisible) {
           setAnimated(true);
           observer.disconnect();
         }
       },
-      { threshold: 0.3 }
+      { threshold: 0.1 }
     );
-    if (skillRef.current) observer.observe(skillRef.current);
+
+    refs.forEach((ref) => {
+      if (ref.current) observer.observe(ref.current);
+    });
+
     return () => observer.disconnect();
   }, []);
 
@@ -80,7 +140,10 @@ function AboutPage() {
                 <div className="space-y-3 mb-10">
                   {values.map((v, i) => (
                     <div key={i} className="flex items-center gap-3">
-                      <CheckCircle size={15} className="text-[#2ae5dd] shrink-0" />
+                      <CheckCircle
+                        size={15}
+                        className="text-[#2ae5dd] shrink-0"
+                      />
                       <span className="text-md text-gray-500">{v}</span>
                     </div>
                   ))}
@@ -91,12 +154,15 @@ function AboutPage() {
                   className="inline-flex items-center gap-3 bg-black text-white px-7 py-3.5 rounded-full hover:bg-[#2ae5dd] hover:text-black transition-all duration-300 group"
                 >
                   <span className="font-regular text-md">Discover More</span>
-                  <ArrowUpRight size={16} className="group-hover:rotate-45 transition-transform duration-300" />
+                  <ArrowUpRight
+                    size={16}
+                    className="group-hover:rotate-45 transition-transform duration-300"
+                  />
                 </Link>
               </div>
 
               {/* RIGHT */}
-              <div ref={skillRef} className="pb-16 flex flex-col gap-6">
+              <div ref={desktopSkillRef} className="pb-16 flex flex-col gap-6">
                 <div className="bg-[#f9fffe] border border-[#2ae5dd]/20 rounded-2xl p-8">
                   <div className="flex items-center gap-3 mb-7">
                     <div className="w-7 h-px bg-[#2ae5dd]" />
@@ -105,28 +171,7 @@ function AboutPage() {
                     </p>
                   </div>
 
-                  <div className="space-y-6">
-                    {skills.map((skill, i) => (
-                      <div key={i}>
-                        <div className="flex items-center justify-between mb-2">
-                          <span className="text-sm font-medium text-black">{skill.label}</span>
-                          <span className="text-sm font-semibold" style={{ color: skill.color }}>
-                            {skill.percent}%
-                          </span>
-                        </div>
-                        <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
-                          <div
-                            className="h-full rounded-full transition-all duration-1000 ease-out"
-                            style={{
-                              width: animated ? `${skill.percent}%` : "0%",
-                              backgroundColor: skill.color,
-                              transitionDelay: `${i * 150}ms`,
-                            }}
-                          />
-                        </div>
-                      </div>
-                    ))}
-                  </div>
+                  <SkillBars animated={animated} />
                 </div>
 
                 <div className="relative rounded-2xl overflow-hidden bg-black h-52">
@@ -141,7 +186,8 @@ function AboutPage() {
                       Our Mission
                     </p>
                     <p className="text-white text-sm leading-6">
-                      Build smart digital products that drive real business results.
+                      Build smart digital products that drive real business
+                      results.
                     </p>
                   </div>
                 </div>
@@ -168,8 +214,9 @@ function AboutPage() {
                     Helping Brands Grow Through Creative Technology
                   </h2>
                   <p className="text-gray-500 text-md leading-7">
-                    From UI/UX design to full-stack development, mobile apps, and digital
-                    marketing — Nexbird delivers end-to-end digital solutions that make an impact.
+                    From UI/UX design to full-stack development, mobile apps,
+                    and digital marketing — Nexbird delivers end-to-end digital
+                    solutions that make an impact.
                   </p>
                 </div>
               </div>
@@ -183,9 +230,10 @@ function AboutPage() {
                 />
                 <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6">
                   <p className="text-white text-sm leading-6">
-                    Our mission is to create innovative, scalable, and user-friendly digital
-                    solutions that help businesses grow, improve efficiency, and achieve
-                    long-term success in an ever-evolving digital world.
+                    Our mission is to create innovative, scalable, and
+                    user-friendly digital solutions that help businesses grow,
+                    improve efficiency, and achieve long-term success in an
+                    ever-evolving digital world.
                   </p>
                 </div>
               </div>
@@ -195,7 +243,9 @@ function AboutPage() {
                   <Rocket className="text-[#2ae5dd]" size={18} />
                 </div>
                 <div>
-                  <h2 className="text-white font-semibold text-base mb-2">Innovation First</h2>
+                  <h2 className="text-white font-semibold text-base mb-2">
+                    Innovation First
+                  </h2>
                   <p className="text-gray-400 text-sm leading-6">
                     Fresh digital concepts focused on performance and modern UX.
                   </p>
@@ -207,7 +257,9 @@ function AboutPage() {
                   <Layers3 className="text-black" size={18} />
                 </div>
                 <div>
-                  <h2 className="text-black font-semibold text-base mb-2">Smart Strategy</h2>
+                  <h2 className="text-black font-semibold text-base mb-2">
+                    Smart Strategy
+                  </h2>
                   <p className="text-black/60 text-sm leading-6">
                     Scalable planning for startups and enterprises.
                   </p>
@@ -219,7 +271,9 @@ function AboutPage() {
                   <Users className="text-[#2ae5dd]" size={18} />
                 </div>
                 <div>
-                  <h2 className="text-black font-semibold text-base mb-2">Expert Team</h2>
+                  <h2 className="text-black font-semibold text-base mb-2">
+                    Expert Team
+                  </h2>
                   <p className="text-gray-500 text-sm leading-6">
                     developers, designers & strategists for your success.
                   </p>
@@ -231,17 +285,22 @@ function AboutPage() {
                   <TrendingUp className="text-[#2ae5dd]" size={22} />
                 </div>
                 <div>
-                  <h2 className="text-white font-semibold text-base mb-2">Business Growth</h2>
+                  <h2 className="text-white font-semibold text-base mb-2">
+                    Business Growth
+                  </h2>
                   <p className="text-gray-400 text-sm leading-6">
-                    We help brands grow digitally through creative technology and data-driven
-                    decisions that deliver measurable results.
+                    We help brands grow digitally through creative technology
+                    and data-driven decisions that deliver measurable results.
                   </p>
                 </div>
                 <Link
                   href="/Home"
                   className="shrink-0 w-10 h-10 rounded-full border border-white/20 flex items-center justify-center hover:bg-[#2ae5dd] hover:border-[#2ae5dd] transition-all duration-300 group"
                 >
-                  <ArrowUpRight size={16} className="text-white group-hover:text-black transition-colors" />
+                  <ArrowUpRight
+                    size={16}
+                    className="text-white group-hover:text-black transition-colors"
+                  />
                 </Link>
               </div>
             </div>
@@ -253,7 +312,7 @@ function AboutPage() {
       <div className="hidden 2xl:block">
         <section className={`${poppins.className} bg-white overflow-hidden`}>
           {/* ── HERO ── */}
-          <div className="max-w-screen-2xl mx-auto  pt-24 pb-0">
+          <div className="max-w-screen-2xl mx-auto pt-24 pb-0">
             <div className="grid grid-cols-2 gap-24 items-center">
               {/* LEFT */}
               <div className="pb-20">
@@ -281,7 +340,10 @@ function AboutPage() {
                 <div className="space-y-4 mb-12">
                   {values.map((v, i) => (
                     <div key={i} className="flex items-center gap-4">
-                      <CheckCircle size={18} className="text-[#2ae5dd] shrink-0" />
+                      <CheckCircle
+                        size={18}
+                        className="text-[#2ae5dd] shrink-0"
+                      />
                       <span className="text-base text-gray-500">{v}</span>
                     </div>
                   ))}
@@ -292,12 +354,15 @@ function AboutPage() {
                   className="inline-flex items-center gap-3 bg-black text-white px-9 py-4 rounded-full hover:bg-[#2ae5dd] hover:text-black transition-all duration-300 group"
                 >
                   <span className="font-regular text-base">Discover More</span>
-                  <ArrowUpRight size={18} className="group-hover:rotate-45 transition-transform duration-300" />
+                  <ArrowUpRight
+                    size={18}
+                    className="group-hover:rotate-45 transition-transform duration-300"
+                  />
                 </Link>
               </div>
 
-              {/* RIGHT */}
-              <div ref={skillRef} className="pb-20 flex flex-col gap-8">
+              {/* RIGHT — 2xl skill bars */}
+              <div ref={xl2SkillRef} className="pb-20 flex flex-col gap-8">
                 <div className="bg-[#f9fffe] border border-[#2ae5dd]/20 rounded-2xl p-10">
                   <div className="flex items-center gap-3 mb-8">
                     <div className="w-8 h-px bg-[#2ae5dd]" />
@@ -306,28 +371,8 @@ function AboutPage() {
                     </p>
                   </div>
 
-                  <div className="space-y-7">
-                    {skills.map((skill, i) => (
-                      <div key={i}>
-                        <div className="flex items-center justify-between mb-3">
-                          <span className="text-base font-medium text-black">{skill.label}</span>
-                          <span className="text-base font-semibold" style={{ color: skill.color }}>
-                            {skill.percent}%
-                          </span>
-                        </div>
-                        <div className="w-full h-2.5 bg-gray-100 rounded-full overflow-hidden">
-                          <div
-                            className="h-full rounded-full transition-all duration-1000 ease-out"
-                            style={{
-                              width: animated ? `${skill.percent}%` : "0%",
-                              backgroundColor: skill.color,
-                              transitionDelay: `${i * 150}ms`,
-                            }}
-                          />
-                        </div>
-                      </div>
-                    ))}
-                  </div>
+                  {/* 2xl skill bars — slightly larger sizing */}
+                  <SkillBars animated={animated} size="lg" />
                 </div>
 
                 <div className="relative rounded-2xl overflow-hidden bg-black h-64">
@@ -342,7 +387,8 @@ function AboutPage() {
                       Our Mission
                     </p>
                     <p className="text-white text-base leading-7">
-                      Build smart digital products that drive real business results.
+                      Build smart digital products that drive real business
+                      results.
                     </p>
                   </div>
                 </div>
@@ -369,8 +415,9 @@ function AboutPage() {
                     Helping Brands Grow Through Creative Technology
                   </h2>
                   <p className="text-gray-500 text-base leading-8">
-                    From UI/UX design to full-stack development, mobile apps, and digital
-                    marketing — Nexbird delivers end-to-end digital solutions that make an impact.
+                    From UI/UX design to full-stack development, mobile apps,
+                    and digital marketing — Nexbird delivers end-to-end digital
+                    solutions that make an impact.
                   </p>
                 </div>
               </div>
@@ -384,9 +431,10 @@ function AboutPage() {
                 />
                 <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-8">
                   <p className="text-white text-base leading-7">
-                    Our mission is to create innovative, scalable, and user-friendly digital
-                    solutions that help businesses grow, improve efficiency, and achieve
-                    long-term success in an ever-evolving digital world.
+                    Our mission is to create innovative, scalable, and
+                    user-friendly digital solutions that help businesses grow,
+                    improve efficiency, and achieve long-term success in an
+                    ever-evolving digital world.
                   </p>
                 </div>
               </div>
@@ -396,7 +444,9 @@ function AboutPage() {
                   <Rocket className="text-[#2ae5dd]" size={22} />
                 </div>
                 <div>
-                  <h2 className="text-white font-semibold text-lg mb-3">Innovation First</h2>
+                  <h2 className="text-white font-semibold text-lg mb-3">
+                    Innovation First
+                  </h2>
                   <p className="text-gray-400 text-base leading-7">
                     Fresh digital concepts focused on performance and modern UX.
                   </p>
@@ -408,7 +458,9 @@ function AboutPage() {
                   <Layers3 className="text-black" size={22} />
                 </div>
                 <div>
-                  <h2 className="text-black font-semibold text-lg mb-3">Smart Strategy</h2>
+                  <h2 className="text-black font-semibold text-lg mb-3">
+                    Smart Strategy
+                  </h2>
                   <p className="text-black/60 text-base leading-7">
                     Scalable planning for startups and enterprises.
                   </p>
@@ -420,7 +472,9 @@ function AboutPage() {
                   <Users className="text-[#2ae5dd]" size={22} />
                 </div>
                 <div>
-                  <h2 className="text-black font-semibold text-lg mb-3">Expert Team</h2>
+                  <h2 className="text-black font-semibold text-lg mb-3">
+                    Expert Team
+                  </h2>
                   <p className="text-gray-500 text-base leading-7">
                     developers, designers & strategists for your success.
                   </p>
@@ -432,17 +486,22 @@ function AboutPage() {
                   <TrendingUp className="text-[#2ae5dd]" size={26} />
                 </div>
                 <div>
-                  <h2 className="text-white font-semibold text-lg mb-3">Business Growth</h2>
+                  <h2 className="text-white font-semibold text-lg mb-3">
+                    Business Growth
+                  </h2>
                   <p className="text-gray-400 text-base leading-7">
-                    We help brands grow digitally through creative technology and data-driven
-                    decisions that deliver measurable results.
+                    We help brands grow digitally through creative technology
+                    and data-driven decisions that deliver measurable results.
                   </p>
                 </div>
                 <Link
                   href="/Home"
                   className="shrink-0 w-12 h-12 rounded-full border border-white/20 flex items-center justify-center hover:bg-[#2ae5dd] hover:border-[#2ae5dd] transition-all duration-300 group"
                 >
-                  <ArrowUpRight size={18} className="text-white group-hover:text-black transition-colors" />
+                  <ArrowUpRight
+                    size={18}
+                    className="text-white group-hover:text-black transition-colors"
+                  />
                 </Link>
               </div>
             </div>
@@ -466,7 +525,8 @@ function AboutPage() {
 
           <p className="text-gray-400 text-sm leading-7 mb-7">
             Nexbird is a software development company building modern web apps,
-            mobile solutions, and digital experiences for startups and businesses worldwide.
+            mobile solutions, and digital experiences for startups and businesses
+            worldwide.
           </p>
 
           <div className="space-y-3 mb-8">
@@ -483,8 +543,28 @@ function AboutPage() {
             className="inline-flex items-center gap-3 bg-black text-white px-6 py-3 rounded-full hover:bg-[#2ae5dd] hover:text-black transition-all duration-300 group mb-10"
           >
             <span className="font-semibold text-sm">Discover More</span>
-            <ArrowUpRight size={15} className="group-hover:rotate-45 transition-transform duration-300" />
+            <ArrowUpRight
+              size={15}
+              className="group-hover:rotate-45 transition-transform duration-300"
+            />
           </Link>
+
+          {/* Mobile skill bars */}
+          <div
+            ref={mobileSkillRef}
+            className="bg-[#f9fffe] border border-[#2ae5dd]/20 rounded-2xl p-6 mb-8"
+          >
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-6 h-px bg-[#2ae5dd]" />
+              <p className="text-[#2ae5dd] uppercase tracking-[3px] text-xs font-semibold">
+                Our Expertise
+              </p>
+            </div>
+
+            <div className="space-y-5">
+              <SkillBars animated={animated} />
+            </div>
+          </div>
 
           <div className="relative rounded-2xl overflow-hidden bg-black h-56 mb-10">
             <Image
@@ -519,7 +599,8 @@ function AboutPage() {
                 Helping Brands Grow Through Creative Technology
               </h2>
               <p className="text-gray-500 text-sm leading-6">
-                From UI/UX to full-stack development — Nexbird delivers end-to-end solutions.
+                From UI/UX to full-stack development — Nexbird delivers
+                end-to-end solutions.
               </p>
             </div>
 
@@ -527,7 +608,9 @@ function AboutPage() {
               <div className="w-10 h-10 rounded-xl bg-[#2ae5dd]/20 flex items-center justify-center mb-4">
                 <Rocket className="text-[#2ae5dd]" size={18} />
               </div>
-              <h2 className="text-white font-semibold text-sm mb-2">Innovation First</h2>
+              <h2 className="text-white font-semibold text-sm mb-2">
+                Innovation First
+              </h2>
               <p className="text-gray-400 text-sm leading-6">
                 Fresh digital concepts focused on performance and modern UX.
               </p>
@@ -538,16 +621,24 @@ function AboutPage() {
                 <div className="w-9 h-9 rounded-xl bg-black/10 flex items-center justify-center mb-3">
                   <Layers3 className="text-black" size={16} />
                 </div>
-                <h2 className="text-black font-semibold text-sm mb-1">Smart Strategy</h2>
-                <p className="text-black/60 text-sm leading-5">Scalable planning for startups.</p>
+                <h2 className="text-black font-semibold text-sm mb-1">
+                  Smart Strategy
+                </h2>
+                <p className="text-black/60 text-sm leading-5">
+                  Scalable planning for startups.
+                </p>
               </div>
 
               <div className="bg-[#f9fffe] border border-[#2ae5dd]/15 rounded-2xl p-5">
                 <div className="w-9 h-9 rounded-xl bg-black flex items-center justify-center mb-3">
                   <Users className="text-[#2ae5dd]" size={16} />
                 </div>
-                <h2 className="text-black font-semibold text-sm mb-1">Expert Team</h2>
-                <p className="text-gray-500 text-sm leading-5">15+ experts for your success.</p>
+                <h2 className="text-black font-semibold text-sm mb-1">
+                  Expert Team
+                </h2>
+                <p className="text-gray-500 text-sm leading-5">
+                  15+ experts for your success.
+                </p>
               </div>
             </div>
 
@@ -556,9 +647,12 @@ function AboutPage() {
                 <TrendingUp className="text-[#2ae5dd]" size={18} />
               </div>
               <div className="flex-1">
-                <h2 className="text-white font-semibold text-base mb-2">Business Growth</h2>
+                <h2 className="text-white font-semibold text-base mb-2">
+                  Business Growth
+                </h2>
                 <p className="text-gray-400 text-sm leading-6">
-                  We help brands grow digitally through creative technology and data-driven decisions.
+                  We help brands grow digitally through creative technology and
+                  data-driven decisions.
                 </p>
               </div>
             </div>
