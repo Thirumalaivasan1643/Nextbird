@@ -1,52 +1,18 @@
 "use client";
 
-import React, { useEffect, useState, useCallback } from "react";
+import React from "react";
 import Image from "next/image";
 import { poppins } from "../Font/poppins";
 
-const slides = [
-  {
-    src: "/Hero (3).png",
-    alt: "automation",
-    className: "object-cover",
-    sizes: "(max-width: 768px) 100vw, 50vw",
-  },
-];
-
 function Hero() {
-  const [cur, setCur] = useState(0);
-  const [prev, setPrev] = useState(null);
-  const [animating, setAnimating] = useState(false);
-
-  const goTo = useCallback(
-    (next) => {
-      if (animating || next === cur) return;
-      setAnimating(true);
-      setPrev(cur);
-      setCur(next);
-      setTimeout(() => {
-        setPrev(null);
-        setAnimating(false);
-      }, 4000);
-    },
-    [cur, animating]
-  );
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      goTo((cur + 1) % slides.length);
-    }, 4000);
-    return () => clearInterval(timer);
-  }, [cur, goTo]);
-
   return (
     <div>
       {/* ===== DESKTOP (lg, xl) ===== */}
       <div className="hidden lg:block xl:block 2xl:hidden">
         <section
-          className={`${poppins.className} bg-[#f5ffff] flex px-20 pt-20`}
+          className={`${poppins.className} bg-[#f5ffff] px-20 pt-20 pb-10 overflow-hidden min-h-screen`}
         >
-          <div className="grid grid-cols-2 gap-20 w-full items-center">
+          <div className="grid grid-cols-2 gap-10 w-full h-full items-center">
             {/* LEFT */}
             <div>
               <div className="space-y-4">
@@ -80,35 +46,15 @@ function Hero() {
               </div>
             </div>
 
-            {/* RIGHT — CAROUSEL */}
-            <div className="w-full h-[550px] relative">
-              {slides.map((slide, i) => {
-                const isActive = i === cur;
-                const isExit = i === prev;
-                return (
-                  <div
-                    key={i}
-                    className="absolute inset-0 transition-all duration-[1000ms] ease-in-out"
-                    style={{
-                      opacity: isActive ? 1 : 0,
-                      transform: isActive
-                        ? "translateX(0%)"
-                        : isExit
-                        ? "translateX(-100%)"
-                        : "translateX(100%)",
-                      pointerEvents: isActive ? "auto" : "none",
-                    }}
-                  >
-                    <Image
-                      src={slide.src}
-                      alt={slide.alt}
-                      fill
-                      sizes={slide.sizes}
-                      className={slide.className}
-                    />
-                  </div>
-                );
-              })}
+            {/* RIGHT — IMAGE */}
+            <div className="w-full h-[75vh] relative overflow-hidden">
+              <Image
+                src="/Hero (3).png"
+                alt="automation"
+                fill
+                sizes="50vw"
+                className="object-contain"
+              />
             </div>
           </div>
         </section>
@@ -117,7 +63,7 @@ function Hero() {
       {/* ===== 2XL DESKTOP (1536px+) ===== */}
       <div className="hidden 2xl:block">
         <section
-          className={`${poppins.className} bg-[#f5ffff] flex pt-24 pb-10`}
+          className={`${poppins.className} bg-[#f5ffff] flex pt-24 pb-10 overflow-hidden`}
         >
           <div className="grid grid-cols-2 gap-28 w-full items-center max-w-screen-2xl mx-auto">
             {/* LEFT */}
@@ -153,35 +99,15 @@ function Hero() {
               </div>
             </div>
 
-            {/* RIGHT — CAROUSEL */}
-            <div className="w-full h-[680px] relative">
-              {slides.map((slide, i) => {
-                const isActive = i === cur;
-                const isExit = i === prev;
-                return (
-                  <div
-                    key={i}
-                    className="absolute inset-0 transition-all duration-[1000ms] ease-in-out"
-                    style={{
-                      opacity: isActive ? 1 : 0,
-                      transform: isActive
-                        ? "translateX(0%)"
-                        : isExit
-                        ? "translateX(-100%)"
-                        : "translateX(100%)",
-                      pointerEvents: isActive ? "auto" : "none",
-                    }}
-                  >
-                    <Image
-                      src={slide.src}
-                      alt={slide.alt}
-                      fill
-                      sizes="50vw"
-                      className={slide.className}
-                    />
-                  </div>
-                );
-              })}
+            {/* RIGHT — IMAGE */}
+            <div className="w-full h-[680px] relative overflow-hidden">
+              <Image
+                src="/Hero (3).png"
+                alt="automation"
+                fill
+                sizes="50vw"
+                className="object-contain"
+              />
             </div>
           </div>
         </section>
@@ -209,7 +135,7 @@ function Hero() {
                 decision making.
               </p>
 
-              <div className="space-y-3 text-left pt-2">
+              <div className="space-y-3 pt-2 flex flex-col items-center">
                 {[
                   "Custom Web Application Development",
                   "Modern Responsive Website Design",

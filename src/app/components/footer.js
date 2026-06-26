@@ -104,9 +104,9 @@ function Footer() {
               <div className="space-y-6 text-sm text-gray-300">
                 <p>nextbirdtech@gmail.com</p>
 
-                <p>+91 7845205463</p>
+                <p>+91 9629947792</p>
 
-                <p>Chennai, Tamil Nadu, India</p>
+                <p>Dharmapuri, Tamil Nadu, India</p>
               </div>
             </div>
           </div>
@@ -233,9 +233,9 @@ function Footer() {
               <div className="space-y-6 text-base text-gray-300">
                 <p>nextbirdtech@gmail.com</p>
 
-                <p>+91 7845205463</p>
+                <p>+91 9629947792</p>
 
-                <p>Chennai, Tamil Nadu, India</p>
+                <p>Dharmapuri, Tamil Nadu, India</p>
               </div>
             </div>
           </div>
@@ -372,12 +372,12 @@ function Footer() {
 
                   <div>
                     <p className="text-[#2ae5dd] mb-1">Phone</p>
-                    <p>+91 7845205463</p>
+                    <p>+91 9629947792</p>
                   </div>
 
                   <div>
                     <p className="text-[#2ae5dd] mb-1">Location</p>
-                    <p>Chennai, Tamil Nadu, India</p>
+                    <p>Dharmapuri, Tamil Nadu, India</p>
                   </div>
                 </div>
               </div>

@@ -550,21 +550,7 @@ function AboutPage() {
           </Link>
 
           {/* Mobile skill bars */}
-          <div
-            ref={mobileSkillRef}
-            className="bg-[#f9fffe] border border-[#2ae5dd]/20 rounded-2xl p-6 mb-8"
-          >
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-6 h-px bg-[#2ae5dd]" />
-              <p className="text-[#2ae5dd] uppercase tracking-[3px] text-xs font-semibold">
-                Our Expertise
-              </p>
-            </div>
-
-            <div className="space-y-5">
-              <SkillBars animated={animated} />
-            </div>
-          </div>
+           
 
           <div className="relative rounded-2xl overflow-hidden bg-black h-56 mb-10">
             <Image
